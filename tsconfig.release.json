@@ -3,9 +3,10 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "build",
-    "removeComments": true
+    "removeComments": true,
+    "noUnusedLocals": false
   },
   "include": [
     "src/**/*"
-  ]
+  ],
 }

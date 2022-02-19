@@ -1,32 +1,36 @@
-/**
- * Some predefined delay values (in milliseconds).
- */
-export enum Delays {
-  Short = 500,
-  Medium = 2000,
-  Long = 5000,
+const KEYWORD = 'jesus';
+
+export function validateLetter(letter: string, i: number) {
+  return letter === KEYWORD[i];
 }
 
-/**
- * Returns a Promise<string> that resolves after a given time.
- *
- * @param {string} name - A name.
- * @param {number=} [delay=Delays.Medium] - A number of milliseconds to delay resolution of the Promise.
- * @returns {Promise<string>}
- */
-function delayedHello(
-  name: string,
-  delay: number = Delays.Medium,
-): Promise<string> {
-  return new Promise((resolve: (value?: string) => void) =>
-    setTimeout(() => resolve(`Hello, ${name}`), delay),
-  );
+export function validateLetterInWord(letter: string) {
+  return KEYWORD.includes(letter);
 }
 
-// Below are examples of using ESLint errors suppression
-// Here it is suppressing a missing return type definition for the greeter function.
+export function validateWord(guess: string): string {
+  return guess
+    .split('')
+    .map((letter: string, index: number) => {
+      const checkLetterPositition = validateLetter(letter, index);
+      const checkLetterInWord = validateLetterInWord(letter);
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export async function greeter(name: string) {
-  return await delayedHello(name, Delays.Long);
+      if (checkLetterPositition) return '🟩';
+      else if (checkLetterInWord) return '🟨';
+      else return '🟥';
+    })
+    .join('');
 }
+
+import * as readline from 'readline';
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+rl.question('Tente adivinhar a palavra biblica do dia: ', (guess) => {
+  if (guess.length != 5) console.log('A palavra deve ter 5 letras.');
+  else console.log(guess.toUpperCase() + '\n', validateWord(guess));
+  rl.close();
+});
